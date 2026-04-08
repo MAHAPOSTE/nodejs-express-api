@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+
+    <h1>Search Page</h1>
+
+    <form onsubmit="handleSubmit(event)">
+        <label>Enter the course title:</label>
+        <input type="text" id="course-title" />
+        <input type="submit" value="Search" />
+    </form>
+
+    <ul id="results"></ul>
+
+    <script>
+        const handleSubmit = (event) => {
+            event.preventDefault();
+
+            const title = document.getElementById("course-title").value;
+            console.log("form submitted with", title);
+
+            const url = "http://127.0.0.1:4000/courses/search?title=" + title;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.send();
+
+            xhr.onload = function() {
+
+                const result = JSON.parse(xhr.responseText);
+                    console.log(result);
+                    const ul = document.getElementById("results");
+                    ul.innerHTML = ""; 
+                    for (let course of result) {
+                        const li = document.createElement("li");
+                        li.textContent = course.title;
+                        ul.appendChild(li);
+                    }
+            }
+        }
+    </script>
+
+</body>
+</html>
